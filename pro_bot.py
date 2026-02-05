@@ -27,8 +27,11 @@ threading.Thread(target=start_server, daemon=True).start()
 
 # ==========================================
 # ⚙️ الإعدادات المتقدمة (Config)
-# ==========================================
-TOKEN = "8298277087:AAHad4SiGJNrgzk5tnN7mi6bGI-qTP01PSg"
+# ====================================
+# ==========================
+# ⚙️ إعدادات البوت
+# ==========================
+TOKEN = "8298277087:AAF7Z6J24bIvFb1e_xpZvSuJm1mXhZocJzw"
 VERIFICATION_CODE = "4415"
 QURAN_VIDEO_URL = "https://www.instagram.com/reel/DUX8YYuCurE/?igsh=MWdlOGh6Y3ppdWd1cQ=="
 
@@ -96,19 +99,21 @@ class SmartDownloader:
         self.user_id = user_id
         self.last_update_time = 0
 
+    # تحديث تقدم التحميل (Progress)
     def progress_hook(self, d):
         if d['status'] == 'downloading':
             current_time = time.time()
             # تحديث الرسالة كل 10 ثوانٍ فقط لتوفير النت الضعيف جداً
-            if current_time - self.last_update_time < 10: return
+            if current_time - self.last_update_time < 10:
+                return
             self.last_update_time = current_time
-            
+
             p = d.get('_percent_str', '0%')
             speed = d.get('_speed_str', 'N/A')
             eta = d.get('_eta_str', 'N/A')
-            
+
             bar = self.create_progress_bar(d.get('downloaded_bytes', 0), d.get('total_bytes', 1))
-            
+
             text = (
                 f"📥 **تحميل ذكي (وضع التوفير)**\n"
                 f"━━━━━━━━━━━━━━\n"
@@ -119,16 +124,21 @@ class SmartDownloader:
                 f"━━━━━━━━━━━━━━\n"
                 f"⚠️ سيتم الرفع تلقائياً عند الاكتمال"
             )
-            try: bot.edit_message_text(text, self.chat_id, self.msg_id)
-            except: pass
+            try:
+                bot.edit_message_text(text, self.chat_id, self.msg_id)
+            except:
+                pass
 
+    # إنشاء شريط التقدم
     def create_progress_bar(self, current, total):
-        if not total: total = 1
+        if not total:
+            total = 1
         percentage = current / total
         length = 10
         filled_len = int(length * percentage)
         return '🟢' * filled_len + '⚪' * (length - filled_len)
 
+    # دالة التحميل (Download) مع دعم يوتيوب وميزاتك القديمة
     def download(self, url, quality, file_path):
         ydl_opts = {
             'outtmpl': file_path,
@@ -139,16 +149,44 @@ class SmartDownloader:
             'progress_hooks': [self.progress_hook],
             'quiet': True,
             'no_warnings': True,
+
+            # دعم يوتيوب
+            'merge_output_format': 'mp4',
+            'force_ipv4': True,
+            'nocheckcertificate': True,
+            'ignoreerrors': False,
+            'http_headers': {
+                'User-Agent': (
+                    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
+                    'AppleWebKit/537.36 (KHTML, like Gecko) '
+                    'Chrome/120.0.0.0 Safari/537.36'
+                )
+            },
+            'extractor_args': {
+                'youtube': {
+                    'player_client': ['android', 'web'],
+                    'skip': ['hls', 'dash']
+                }
+            }
         }
 
         if quality == 'audio':
             ydl_opts['format'] = 'bestaudio/best'
-            ydl_opts['postprocessors'] = [{'key': 'FFmpegExtractAudio','preferredcodec': 'mp3','preferredquality': '192'}]
+            ydl_opts['postprocessors'] = [{
+                'key': 'FFmpegExtractAudio',
+                'preferredcodec': 'mp3',
+                'preferredquality': '192'
+            }]
         else:
-            # فلتر الجودة المخصص
-            try: h = int(quality)
-            except: h = 720
-            ydl_opts['format'] = f'bestvideo[height<={h}]+bestaudio/best[ext=m4a]/best[height<={h}]/best'
+            try:
+                h = int(quality)
+            except:
+                h = 720
+
+            ydl_opts['format'] = (
+                f'bestvideo[height<={h}][ext=mp4]+bestaudio[ext=m4a]/'
+                f'best[height<={h}][ext=mp4]/best'
+            )
 
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             try:
@@ -156,7 +194,6 @@ class SmartDownloader:
                 return True
             except Exception as e:
                 return str(e)
-
 # ==========================================
 # 🤖 معالجة الأوامر والرسائل
 # ==========================================
@@ -303,10 +340,10 @@ def run_task(prog_msg, user_id, url, quality, file_path):
 
 # تشغيل البوت
 if __name__ == "__main__":
+    bot.remove_webhook()
     print("🚀 System Online...")
     while True:
         try:
             bot.polling(none_stop=True, interval=3, timeout=60)
         except Exception as e:
             time.sleep(5)
-                    
