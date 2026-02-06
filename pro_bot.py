@@ -217,31 +217,32 @@ executor = ThreadPoolExecutor(max_workers=20)
 #==========================================
 
 class Database:
-@staticmethod
-def load():
-if not os.path.exists(DB_FILE):
-return {"users": {}, "verified": [], "stats": {"total_dl": 0}}
-try:
-with open(DB_FILE, "r") as f:
-return json.load(f)
-except:
-return {"users": {}, "verified": [], "stats": {"total_dl": 0}}
+    @staticmethod
+    def load():
+        if not os.path.exists(DB_FILE):
+            return {"users": {}, "verified": [], "stats": {"total_dl": 0}}
+        try:
+            with open(DB_FILE, "r") as f:
+                return json.load(f)
+        except:
+            return {"users": {}, "verified": [], "stats": {"total_dl": 0}}
 
-@staticmethod
-def save(data):
-with open(DB_FILE, "w") as f:
-json.dump(data, f, indent=4)
+    @staticmethod
+    def save(data):
+        with open(DB_FILE, "w") as f:
+            json.dump(data, f, indent=4)
 
-@staticmethod
-def is_verified(user_id):
-return str(user_id) in Database.load().get("verified", [])
+    @staticmethod
+    def is_verified(user_id):
+        return str(user_id) in Database.load().get("verified", [])
 
-@staticmethod
-def verify_user(user_id):
-data = Database.load()
-if str(user_id) not in data["verified"]:
-data["verified"].append(str(user_id))
-Database.save(data)
+    @staticmethod
+    def verify_user(user_id):
+        data = Database.load()
+        if str(user_id) not in data["verified"]:
+            data["verified"].append(str(user_id))
+            Database.save(data)
+            
 
 #==========================================
 
