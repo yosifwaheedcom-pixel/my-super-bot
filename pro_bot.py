@@ -15,114 +15,112 @@ import http.server
 import socketserver
 
 # ==========================================
-# 🍪 منطقة الكوكيز (ضع الكود هنا)
+# 🍪 منطقة الكوكيز (تم التصحيح لتعمل مع بايثون)
 # ==========================================
-# قم بلصق كود JSON الطويل الذي نسخته داخل القوسين المربعين أدناه []
-# تأكد من وجود الفاصلة , بين الأقواس إذا كان هناك أكثر من سطر (لكن النسخ واللصق المباشر يكفي)
 COOKIES_DATA = [
     {
         "name": "VISITOR_PRIVACY_METADATA",
         "value": "CgJZRRIEGgAgJQ%3D%3D",
         "domain": ".youtube.com",
-        "hostOnly": false,
+        "hostOnly": False,
         "path": "/",
-        "secure": true,
-        "httpOnly": true,
+        "secure": True,
+        "httpOnly": True,
         "sameSite": "no_restriction",
-        "session": false,
+        "session": False,
         "firstPartyDomain": "",
-        "partitionKey": null,
+        "partitionKey": None,
         "expirationDate": 1785932125,
-        "storeId": null
+        "storeId": None
     },
     {
         "name": "GPS",
         "value": "1",
         "domain": ".youtube.com",
-        "hostOnly": false,
+        "hostOnly": False,
         "path": "/",
-        "secure": true,
-        "httpOnly": true,
+        "secure": True,
+        "httpOnly": True,
         "sameSite": "no_restriction",
-        "session": false,
+        "session": False,
         "firstPartyDomain": "",
-        "partitionKey": null,
+        "partitionKey": None,
         "expirationDate": 1770381848,
-        "storeId": null
+        "storeId": None
     },
     {
         "name": "YSC",
         "value": "NDZ09HNf8Kg",
         "domain": ".youtube.com",
-        "hostOnly": false,
+        "hostOnly": False,
         "path": "/",
-        "secure": true,
-        "httpOnly": true,
+        "secure": True,
+        "httpOnly": True,
         "sameSite": "no_restriction",
-        "session": true,
+        "session": True,
         "firstPartyDomain": "",
-        "partitionKey": null,
-        "storeId": null
+        "partitionKey": None,
+        "storeId": None
     },
     {
         "name": "__Secure-ROLLOUT_TOKEN",
         "value": "COnK6O6f7cK9JRC8lYek5MSSAxjrk9a_5MSSAw%3D%3D",
         "domain": ".youtube.com",
-        "hostOnly": false,
+        "hostOnly": False,
         "path": "/",
-        "secure": true,
-        "httpOnly": true,
+        "secure": True,
+        "httpOnly": True,
         "sameSite": "no_restriction",
-        "session": false,
+        "session": False,
         "firstPartyDomain": "",
-        "partitionKey": null,
+        "partitionKey": None,
         "expirationDate": 1785930136,
-        "storeId": null
+        "storeId": None
     },
     {
         "name": "__Secure-YNID",
         "value": "15.YT=Jq1aQ5gbCJDDUQ6NA7dCg-tTeTPtARQt1B_Zz98gSG8fGhjOUaGhaaYNuHbT1VQqRobY3mWXuxFAaVlxSaTzfKBz9D4VK9DYMbT131aeW8NBLz7A6D35OdfCorf_LnB6ccejYBooMJw0Q_qD-CRvj8eQbMSLniCzzdRnTUA7MM77ie-YdLGOcjCQaTagizMiqHOB4DTsip2S5zfHmJMt-c7R_21aT9nsLSwEU5EZC0nP0UDu1bh54iXZHmTTAvteowISu_yugDDA4KzVGhiGXTWu0GdHPs2S3Hguj3uWh1HruH1cbPQuigOVNAWk7E2lTJhrQUni1YsR0ZtWicfhHQ",
         "domain": ".youtube.com",
-        "hostOnly": false,
+        "hostOnly": False,
         "path": "/",
-        "secure": true,
-        "httpOnly": true,
+        "secure": True,
+        "httpOnly": True,
         "sameSite": "no_restriction",
-        "session": false,
+        "session": False,
         "firstPartyDomain": "",
-        "partitionKey": null,
+        "partitionKey": None,
         "expirationDate": 1785930078,
-        "storeId": null
+        "storeId": None
     },
     {
         "name": "PREF",
         "value": "tz=Asia.Aden",
         "domain": ".youtube.com",
-        "hostOnly": false,
+        "hostOnly": False,
         "path": "/",
-        "secure": true,
-        "httpOnly": false,
+        "secure": True,
+        "httpOnly": False,
         "sameSite": "no_restriction",
-        "session": false,
+        "session": False,
         "firstPartyDomain": "",
-        "partitionKey": null,
+        "partitionKey": None,
         "expirationDate": 1833452131,
-        "storeId": null
+        "storeId": None
     },
     {
         "name": "VISITOR_INFO1_LIVE",
         "value": "lIdCxdnbrsM",
         "domain": ".youtube.com",
-        "hostOnly": false,
+        "hostOnly": False,
         "path": "/",
-        "secure": true,
-        "httpOnly": true,
+        "secure": True,
+        "httpOnly": True,
         "sameSite": "no_restriction",
-        "session": false,
+        "session": False,
         "firstPartyDomain": "",
-        "partitionKey": null,
+        "partitionKey": None,
         "expirationDate": 1785932125,
-        "storeId": null
+        "storeId": None
     }
 ]
 
@@ -139,10 +137,11 @@ def setup_cookies_file():
             for c in COOKIES_DATA:
                 # تحويل القيم لضمان عدم حدوث أخطاء
                 domain = c.get('domain', '')
-                flag = 'TRUE' if c.get('hostOnly') == False else 'FALSE' # yt-dlp logic
+                # تحويل True/False إلى TRUE/FALSE
+                flag = 'TRUE' if c.get('hostOnly') == True else 'FALSE' 
                 path = c.get('path', '/')
                 secure = 'TRUE' if c.get('secure', False) else 'FALSE'
-                expiration = int(c.get('expirationDate', 0))
+                expiration = int(c.get('expirationDate', 0)) if c.get('expirationDate') is not None else 0
                 name = c.get('name', '')
                 value = c.get('value', '')
                 
@@ -285,7 +284,6 @@ class SmartDownloader:
             'geo_bypass_country': 'US',
             'force_ipv4': True,
             'merge_output_format': 'mp4',
-            # هنا تم إضافة ملف الكوكيز ليعمل التحميل
             'cookiefile': 'cookies.txt', 
             'extractor_args': {
                 'youtube': {
@@ -339,7 +337,6 @@ class InternetSearch:
             'no_warnings': True,
             'extract_flat': True,
             'force_ipv4': True,
-            # استخدام الكوكيز للبحث أيضاً
             'cookiefile': 'cookies.txt'
         }
         search_query = f"ytsearch{limit}:{query}"
@@ -543,8 +540,12 @@ def run_task(prog_msg, user_id, url, quality, file_path):
                 else:
                     bot.send_video(prog_msg.chat.id, f, caption="🎬 تم التحميل بنجاح", timeout=2000)
             
-            # تنظيف المساحة (تيرمكس)
+            # تنظيف المساحة
             if os.path.exists(file_path): os.remove(file_path)
             bot.delete_message(prog_msg.chat.id, prog_msg.message_id)
         except Exception as e:
-            bot.send_me
+            bot.send_message(prog_msg.chat.id, f"⚠️ خطأ في الرفع: {e}")
+    else:
+        bot.edit_message_text(f"❌ فشل التحميل: {success}", prog_msg.chat.id, prog_msg.message_id)
+
+# ===========
