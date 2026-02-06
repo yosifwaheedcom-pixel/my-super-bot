@@ -214,7 +214,12 @@ logging.basicConfig(filename=LOG_FILE, level=logging.INFO, format='%(asctime)s -
 
 bot = telebot.TeleBot(TOKEN, threaded=True, num_threads=40)
 executor = ThreadPoolExecutor(max_workers=20)
-
+# تهيئة قاعدة البيانات عند أول تشغيل
+if not os.path.exists(DB_FILE):
+    with open(DB_FILE, "w") as f:
+        json.dump({"users": {}, "verified": [], "stats": {"total_dl": 0}}, f)
+    print("📋 تم إنشاء قاعدة البيانات الجديدة بنجاح!")
+    
 #==========================================
 
 #📊 نظام إدارة البيانات
@@ -635,4 +640,20 @@ def run_task(prog_msg, user_id, url, quality, file_path):
         bot.edit_message_text(f"❌ فشل التحميل:\n{success}", prog_msg.chat.id, prog_msg.message_id)
 
 # السطر الأخير لتشغيل البوت بشكل مستمر
-bot.infinity_polling()
+# ==========================================
+# 🏁 تشغيل المحرك النهائي
+# ==========================================
+
+if __name__ == "__main__":
+    try:
+        print("🚀 جاري تشغيل الأداة المتطورة...")
+        # التأكد من تشغيل سيرفر Flask أولاً
+        print("🌐 سيرفر Flask نشط على المنفذ 8080")
+        
+        # بدء استطلاع الرسائل (Polling)
+        bot.infinity_polling(timeout=90, long_polling_timeout=5)
+        
+    except Exception as e:
+        print(f"⚠️ حدث خطأ غير متوقع في المحرك الرئيسي: {e}")
+        time.sleep(5)
+        
