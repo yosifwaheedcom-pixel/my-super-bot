@@ -28,7 +28,7 @@ threading.Thread(target=start_server, daemon=True).start()
 # ====================================
 TOKEN = "8298277087:AAF7Z6J24bIvFb1e_xpZvSuJm1mXhZocJzw"
 VERIFICATION_CODE = "4415"
-QURAN_VIDEO_URL = "https://www.instagram.com/reel/DUX8YYuCurE/?igsh=MWdlOGh6Y3ppdWd1cQ=="
+QURAN_VIDEO_URL = "https://www.instagram.com/reel/DUYAQBaihUg/?igsh=Y2dhNDNuMGRiYWp3"
 
 # تحسين أداء الشبكة للنت الضعيف جداً
 apihelper.CONNECT_TIMEOUT = 1000
