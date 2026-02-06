@@ -167,16 +167,12 @@ def setup_cookies_file():
                 value = c.get('value', '')
                 f.write(f"{domain}\t{flag}\t{path}\t{secure}\t{expiration}\t{name}\t{value}\n")
         print("✅ تم إعداد ملف الكوكيز (cookies.txt) بنجاح!")
-    except Exception as e:
-        print(f"❌ خطأ في إنشاء ملف الكوكيز: {e}")
+        except Exception as error_msg:  # قمنا بتغيير الاسم للتوضيح
+        print(f"❌ خطأ في إنشاء ملف الكوكيز: {error_msg}")
 
-print(f"❌ خطأ في إنشاء ملف الكوكيز: {e}")
-
-#تشغيل إعداد الكوكيز فوراً عند بدء البوت
-
+# تأكد أن استدعاء الدالة يبدأ من بداية السطر (بدون مسافات)
 setup_cookies_file()
-
-#كود وهمي لفتح منفذ وإرضاء سيرفر Render المجاني
+    
 
 #==========================================
 
