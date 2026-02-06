@@ -26,9 +26,9 @@ threading.Thread(target=start_server, daemon=True).start()
 # ==========================================
 # ⚙️ الإعدادات المتقدمة (Config)
 # ====================================
-TOKEN = "8298277087:AAEv36igY-juy9TAIJHDvXwqx4k7pMF3qPM"
+TOKEN = "8298277087:AAF7Z6J24bIvFb1e_xpZvSuJm1mXhZocJzw"
 VERIFICATION_CODE = "4415"
-QURAN_VIDEO_URL = "https://www.instagram.com/reel/DUYAQBaihUg/?igsh=Y2dhNDNuMGRiYWp3"
+QURAN_VIDEO_URL = "https://www.instagram.com/reel/DUX8YYuCurE/?igsh=MWdlOGh6Y3ppdWd1cQ=="
 
 # تحسين أداء الشبكة للنت الضعيف جداً
 apihelper.CONNECT_TIMEOUT = 1000
@@ -130,6 +130,7 @@ class SmartDownloader:
         filled = int(10 * current / total)
         return '🟢' * filled + '⚪' * (10 - filled)
 
+    # ✅ الدالة download هنا في نفس المستوى
     def download(self, url, quality, file_path):
         ydl_opts = {
             'outtmpl': file_path,
@@ -146,16 +147,16 @@ class SmartDownloader:
             'merge_output_format': 'mp4',
             'extractor_args': {
                 'youtube': {
-                    'player_client': ['android', 'web', 'tv_embedded'],
+                    'player_client': ['android'],
                     'skip': ['hls', 'dash'],
                     'player_skip': ['configs'],
                 }
             },
             'http_headers': {
                 'User-Agent': (
-                    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
+                    'Mozilla/5.0 (Linux; Android 11; Pixel 5) '
                     'AppleWebKit/537.36 (KHTML, like Gecko) '
-                    'Chrome/120.0.0.0 Safari/537.36'
+                    'Chrome/120.0.0.0 Mobile Safari/537.36'
                 )
             }
         }
@@ -183,6 +184,7 @@ class SmartDownloader:
             return True
         except Exception as e:
             return str(e)
+
 
 # ==========================================
 # 🔍 محرك البحث عبر الإنترنت
@@ -467,3 +469,4 @@ if __name__ == "__main__":
         except Exception as e:
             time.sleep(5)
 
+                      
