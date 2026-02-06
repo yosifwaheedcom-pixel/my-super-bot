@@ -248,13 +248,12 @@ class Database:
 
 #🛡️ الحماية وعزل المستخدمين
 
-#==========================================
-
+#=========================================
 def is_owner(call, owner_id):
-if call.from_user.id != int(owner_id):
-bot.answer_callback_query(call.id, "⚠️ عذراً! هذا الطلب يخص مستخدماً آخر. أرسل رابطك الخاص.", show_alert=True)
-return False
-return True
+    if call.from_user.id != int(owner_id):
+        bot.answer_callback_query(call.id, "⚠️ عذراً! هذا الطلب يخص مستخدماً آخر. أرسل رابطك الخاص.", show_alert=True)
+        return False
+    return True
 
 #==========================================
 
@@ -263,22 +262,20 @@ return True
 #==========================================
 
 class SmartDownloader:
-def init(self, chat_id, message_id, user_id):
-self.chat_id = chat_id
-self.msg_id = message_id
-self.user_id = user_id
-self.last_update_time = 0
-
-def progress_hook(self, d):
-if d['status'] == 'downloading':
-now = time.time()
-if now - self.last_update_time < 10:
-return
-self.last_update_time = now
-
-p = d.get('_percent_str', '0%')    
-    speed = d.get('_speed_str', 'N/A')    
-    eta = d.get('_eta_str', 'N/A')    
+    def init(self, chat_id, message_id, user_id):
+        self.chat_id = chat_id
+        self.msg_id = message_id
+        self.user_id = user_id
+        self.last_update_time = 0
+        def progress_hook(self, d):
+            if d['status'] == 'downloading':
+                now = time.time()
+            if now - self.last_update_time < 10:
+                return
+                self.last_update_time = now
+                p = d.get('_percent_str', '0%')    
+                speed = d.get('_speed_str', 'N/A')    
+                eta = d.get('_eta_str', 'N/A')    
 
     bar = self.create_progress_bar(    
         d.get('downloaded_bytes', 0),    
