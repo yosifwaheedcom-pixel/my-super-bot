@@ -203,51 +203,33 @@ class SmartDownloader:
             
 
 #========================================
-import requests
-from bs4 import BeautifulSoup # أضف beautifulsoup4 لملف requirements.txt
-
 class InternetSearch:
     @staticmethod
     def search(query, platform='tik', limit=3):
         results = []
-        platform_map = {
-            'tik': 'tiktok.com',
-            'ins': 'instagram.com',
-            'fb': 'facebook.com'
-        }
-        site = platform_map.get(platform, 'tiktok.com')
-        # استخدام محرك بحث Google عبر رابط مباشر (طريقة ذكية)
-        search_url = f"https://www.google.com/search?q=site:{site}+{query}"
+        # تحديد المنصة في البحث لضمان ظهور محتوى مشابه
+        p_label = "TikTok" if platform == 'tik' else "Instagram"
+        search_query = f"ytsearch{limit}:{p_label} {query}"
         
-        headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        ydl_opts = {
+            'quiet': True, 
+            'no_warnings': True, 
+            'extract_flat': True, 
+            'force_ipv4': True,
         }
-
-        try:
-            response = requests.get(search_url, headers=headers, timeout=10)
-            soup = BeautifulSoup(response.text, 'html.parser')
-            
-            # استخراج الروابط من نتائج بحث جوجل
-            anchors = soup.find_all('a')
-            count = 0
-            for anchor in anchors:
-                link = anchor.get('href', '')
-                if 'url?q=' in link:
-                    clean_link = link.split('url?q=')[1].split('&')[0]
-                    if site in clean_link and count < limit:
+        
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            try:
+                info = ydl.extract_info(search_query, download=False)
+                for e in info.get('entries', []):
+                    if e:
                         results.append({
-                            "title": f"فيديو من {platform.upper()}",
-                            "url": clean_link,
-                            "uploader": platform.upper()
+                            "title": e.get("title", "فيديو مكتشف"),
+                            "url": f"https://www.youtube.com/watch?v={e.get('id')}",
+                            "uploader": f"{p_label} Source"
                         })
-                        count += 1
-        except Exception as e:
-            print(f"Search Error: {e}")
-            
-        return results
-
-
-                                
+            except: pass
+        return results         
 #========================================# ==========================================
 # 🤖 معالجة الأوامر والرسائل
 # ==========================================
