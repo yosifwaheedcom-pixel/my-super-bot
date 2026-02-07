@@ -171,106 +171,70 @@ class SmartDownloader:
         total = total or 1
         filled = int(10 * current / total)
         return '🟢' * filled + '⚪' * (10 - filled)
-
     def download(self, url, quality, file_path):
         ydl_opts = {
             'outtmpl': file_path,
             'continuedl': True,
-            'retries': 50,
-            'fragment_retries': 50,
+            'retries': 10,
             'socket_timeout': 30,
             'progress_hooks': [self.progress_hook],
             'quiet': True,
             'no_warnings': True,
-            'geo_bypass': True,
-            'geo_bypass_country': 'US',
-            'force_ipv4': True,
-            'merge_output_format': 'mp4',
-            'cookiefile': 'cookies.txt',
-            'extractor_args': {
-                'youtube': {
-                    'player_client': ['android', 'web', 'tv_embedded'],
-                    'skip': ['hls', 'dash'],
-                    'player_skip': ['configs'],
-                }
-            },
+            # محاكاة متصفح موبايل (أفضل لتيك توك وإنستجرام)
+            'user_agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.5 Mobile/15E148 Safari/604.1',
             'http_headers': {
-                'User-Agent': (
-                    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
-                    'AppleWebKit/537.36 (KHTML, like Gecko) '
-                    'Chrome/120.0.0.0 Safari/537.36'
-                )
+                'Referer': 'https://www.google.com/',
             }
         }
 
-        # تحديد الجودة المطلوبة
-        if quality == 'audio':    
-            ydl_opts['format'] = 'bestaudio/best'    
-            ydl_opts['postprocessors'] = [{    
-                'key': 'FFmpegExtractAudio',    
-                'preferredcodec': 'mp3',    
-                'preferredquality': '192'    
-            }]    
-        else:    
-            try:    
-                h = int(quality)    
-            except:    
-                h = 720    
-            ydl_opts['format'] = (    
-                f'bestvideo[height<={h}][ext=mp4]+bestaudio[ext=m4a]/'    
-                f'best[height<={h}][ext=mp4]/best'    
-            )    
+        if quality == 'audio':
+            ydl_opts['format'] = 'bestaudio/best'
+        else:
+            # دقة ذكية للمنصات الأخرى (غالباً mp4 جاهز)
+            ydl_opts['format'] = 'bestvideo+bestaudio/best'
 
-        try:    
-            with yt_dlp.YoutubeDL(ydl_opts) as ydl:    
-                ydl.download([url])    
-            return True    
-        except Exception as e:    
+        try:
+            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                ydl.download([url])
+            return True
+        except Exception as e:
             return str(e)
+            
             
 
 #==========================================
-# محرك البحث عبر الانترنت 
+from duckduckgo_search import DDGS
+
 class InternetSearch:
     @staticmethod
-    def search(query, platform='tiktok', limit=3):
+    def search(query, platform='tik', limit=3):
         results = []
+        # تحديد الفلتر بناءً على المنصة
         platform_map = {
-            'tik': 'tiktok',
-            'ins': 'instagram',
-            'fb': 'facebook',
-            'tw': 'twitter'
+            'tik': 'site:tiktok.com',
+            'ins': 'site:instagram.com',
+            'fb': 'site:facebook.com'
         }
-        target = platform_map.get(platform, 'tiktok')
+        site = platform_map.get(platform, 'site:tiktok.com')
+        search_query = f"{site} {query}"
         
-        # البحث باستخدام محرك بحث يوتيوب العام (لأنه الأقوى في النتائج) 
-        # مع إضافة اسم المنصة للكلمات المفتاحية
-        search_query = f"ytsearch{limit}:{target} {query}"
-        
-        ydl_opts = {
-            'quiet': True,
-            'no_warnings': True,
-            'extract_flat': True,
-            'force_ipv4': True,
-            'ignoreerrors': True,
-            'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
-        }
-        
-        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            try:
-                info = ydl.extract_info(search_query, download=False)
-                if 'entries' in info:
-                    for e in info['entries']:
-                        if e:
-                            results.append({
-                                "title": e.get("title", "فيديو بدون عنوان"),
-                                "url": e.get("url"),
-                                "uploader": e.get("uploader", target.capitalize()),
-                                "duration": e.get("duration", 0)
-                            })
-            except Exception as e:
-                print(f"Search Error: {e}")
+        try:
+            with DDGS() as ddgs:
+                # البحث عن الروابط الحقيقية
+                ddgs_results = ddgs.text(search_query, max_results=limit)
+                for r in ddgs_results:
+                    href = r.get("href", "")
+                    # التأكد أن الرابط ليس من يوتيوب
+                    if "youtube.com" not in href and "youtu.be" not in href:
+                        results.append({
+                            "title": r.get("title", "فيديو مكتشف"),
+                            "url": href,
+                            "uploader": platform.upper()
+                        })
+        except Exception as e:
+            print(f"Search Error: {e}")
         return results
+
                                 
 #========================================# ==========================================
 # 🤖 معالجة الأوامر والرسائل
