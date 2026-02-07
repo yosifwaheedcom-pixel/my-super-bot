@@ -40,149 +40,6 @@ keep_alive()
 #🍪 منطقة الكوكيز (تم التصحيح لتعمل مع بايثون)
 
 #==========================================
-
-COOKIES_DATA = [
-{
-"name": "VISITOR_PRIVACY_METADATA",
-"value": "CgJZRRIEGgAgJQ%3D%3D",
-"domain": ".youtube.com",
-"hostOnly": False,
-"path": "/",
-"secure": True,
-"httpOnly": True,
-"sameSite": "no_restriction",
-"session": False,
-"firstPartyDomain": "",
-"partitionKey": None,
-"expirationDate": 1785932125,
-"storeId": None
-},
-{
-"name": "GPS",
-"value": "1",
-"domain": ".youtube.com",
-"hostOnly": False,
-"path": "/",
-"secure": True,
-"httpOnly": True,
-"sameSite": "no_restriction",
-"session": False,
-"firstPartyDomain": "",
-"partitionKey": None,
-"expirationDate": 1770381848,
-"storeId": None
-},
-{
-"name": "YSC",
-"value": "NDZ09HNf8Kg",
-"domain": ".youtube.com",
-"hostOnly": False,
-"path": "/",
-"secure": True,
-"httpOnly": True,
-"sameSite": "no_restriction",
-"session": True,
-"firstPartyDomain": "",
-"partitionKey": None,
-"storeId": None
-},
-{
-"name": "__Secure-ROLLOUT_TOKEN",
-"value": "COnK6O6f7cK9JRC8lYek5MSSAxjrk9a_5MSSAw%3D%3D",
-"domain": ".youtube.com",
-"hostOnly": False,
-"path": "/",
-"secure": True,
-"httpOnly": True,
-"sameSite": "no_restriction",
-"session": False,
-"firstPartyDomain": "",
-"partitionKey": None,
-"expirationDate": 1785930136,
-"storeId": None
-},
-{
-"name": "__Secure-YNID",
-"value": "15.YT=Jq1aQ5gbCJDDUQ6NA7dCg-tTeTPtARQt1B_Zz98gSG8fGhjOUaGhaaYNuHbT1VQqRobY3mWXuxFAaVlxSaTzfKBz9D4VK9DYMbT131aeW8NBLz7A6D35OdfCorf_LnB6ccejYBooMJw0Q_qD-CRvj8eQbMSLniCzzdRnTUA7MM77ie-YdLGOcjCQaTagizMiqHOB4DTsip2S5zfHmJMt-c7R_21aT9nsLSwEU5EZC0nP0UDu1bh54iXZHmTTAvteowISu_yugDDA4KzVGhiGXTWu0GdHPs2S3Hguj3uWh1HruH1cbPQuigOVNAWk7E2lTJhrQUni1YsR0ZtWicfhHQ",
-"domain": ".youtube.com",
-"hostOnly": False,
-"path": "/",
-"secure": True,
-"httpOnly": True,
-"sameSite": "no_restriction",
-"session": False,
-"firstPartyDomain": "",
-"partitionKey": None,
-"expirationDate": 1785930078,
-"storeId": None
-},
-{
-"name": "PREF",
-"value": "tz=Asia.Aden",
-"domain": ".youtube.com",
-"hostOnly": False,
-"path": "/",
-"secure": True,
-"httpOnly": False,
-"sameSite": "no_restriction",
-"session": False,
-"firstPartyDomain": "",
-"partitionKey": None,
-"expirationDate": 1833452131,
-"storeId": None
-},
-{
-"name": "VISITOR_INFO1_LIVE",
-"value": "lIdCxdnbrsM",
-"domain": ".youtube.com",
-"hostOnly": False,
-"path": "/",
-"secure": True,
-"httpOnly": True,
-"sameSite": "no_restriction",
-"session": False,
-"firstPartyDomain": "",
-"partitionKey": None,
-"expirationDate": 1785932125,
-"storeId": None
-}
-]
-def setup_cookies_file():
-    """دالة احترافية لإنشاء ملف كوكيز بتنسيق Netscape الصحيح"""
-    if not COOKIES_DATA:
-        print("⚠️ تنبيه: لم يتم وضع الكوكيز!")
-        return
-
-    try:
-        with open('cookies.txt', 'w', encoding='utf-8') as f:
-            # السطر التعريفي الإلزامي لتنسيق Netscape
-            f.write("# Netscape HTTP Cookie File\n")
-            f.write("# http://curl.haxx.se/rfc/cookie_spec.html\n")
-            f.write("# This is a generated file!  Do not edit.\n\n")
-            
-            for c in COOKIES_DATA:
-                # تحويل القيم للمطلوب في التنسيق العالمي
-                domain = c.get('domain', '')
-                # التنسيق يتطلب TRUE/FALSE كـ نصوص واضحة
-                flag = 'TRUE' if domain.startswith('.') else 'FALSE'
-                path = c.get('path', '/')
-                secure = 'TRUE' if c.get('secure') else 'FALSE'
-                expiration = int(c.get('expirationDate', 0)) if c.get('expirationDate') else 0
-                name = c.get('name', '')
-                value = c.get('value', '')
-                
-                # كتابة السطر مع استخدام \t (التاب) الحقيقية كفاصل
-                line = f"{domain}\t{flag}\t{path}\t{secure}\t{expiration}\t{name}\t{value}\n"
-                f.write(line)
-                
-        print("✅ تم ضبط ملف cookies.txt بالمعايير العالمية!")
-    except Exception as e:
-        print(f"❌ خطأ تقني في الملف: {e}")
-
-# استدعاء الدالة
-setup_cookies_file()
-    
-
 #==========================================
 
 #⚙️ الإعدادات المتقدمة (Config)
@@ -374,85 +231,156 @@ class SmartDownloader:
 
 #==========================================
 
-#🔍 محرك البحث عبر الإنترنت
+#🔍  البحث عبر الإنترنت محرك
 
 #==========================================
 #==========================================
 # 🔍 محرك البحث عبر الإنترنت (InternetSearch)
 #==========================================
-
 class InternetSearch:
     @staticmethod
-    def search(query, limit=5):
+    def search(query, platform='tiktok', limit=5):
         results = []
+        # تحديد الموقع بناءً على الاختصار
+        platform_map = {
+            'tik': 'tiktok',
+            'ins': 'instagram',
+            'fb': 'facebook',
+            'tw': 'twitter'
+        }
+        target = platform_map.get(platform, 'tiktok')
+        
         ydl_opts = {
             'quiet': True,
             'no_warnings': True,
             'extract_flat': True,
             'force_ipv4': True,
-            'cookiefile': 'cookies.txt'
+            'ignoreerrors': True,
         }
-        search_query = f"ytsearch{limit}:{query}"
+        
+        # البحث في المنصة المحددة
+        search_query = f"{target}search{limit}:{query}"
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             try:
                 info = ydl.extract_info(search_query, download=False)
                 for e in info.get('entries', []):
-                    results.append({
-                        "title": e.get("title", "بدون عنوان"),
-                        "url": e.get("url"),
-                        "thumb": e.get("thumbnail"),
-                        "duration": e.get("duration", 0),
-                        "uploader": e.get("uploader", "غير معروف")
-                    })
-            except Exception as e:
-                print(f"Search Error: {e}")
+                    if e:
+                        results.append({
+                            "title": e.get("title", "فيديو بدون عنوان"),
+                            "url": e.get("url"),
+                            "uploader": e.get("uploader", target.capitalize())
+                        })
+            except: pass
         return results
+        
                         
 
-#==========================================
-
-#🤖 معالجة الأوامر والرسائل
-
-#==========================================
-
-#==========================================
+#========================================# ==========================================
 # 🤖 معالجة الأوامر والرسائل
-#==========================================
+# ==========================================
 
 @bot.message_handler(commands=['start'])
 def welcome(message):
-    text = (
-        "🌟 مرحباً بك في نظام التحميل الاحترافي V2\n\n"
-        "هذا البوت مصمم للعمل في بيئات الإنترنت القاسية.\n"
-        "🚀 الميزات: استكمال التحميل، عزل المستخدمين، توفير البيانات.\n\n"
-        "📌 أرسل رابط الفيديو (Youtube, TikTok, Facebook, Instagram) للبدء."
+    help_text = (
+        "🚀 **أهلاً بك في نظام التحميل الشامل V2**\n"
+        "تم تحسين النظام ليتجاوز قيود يوتيوب والتركيز على المنصات العالمية.\n\n"
+        "📌 **كيفية التحميل:**\n"
+        "فقط أرسل رابط الفيديو من (TikTok, Instagram, FB) وسأقوم بالباقي.\n\n"
+        "🔍 **كيفية البحث الذكي:**\n"
+        "• للتيك توك: `/search tik [كلمة البحث]`\n"
+        "• للإنستجرام: `/search ins [كلمة البحث]`\n"
+        "• للفيسبوك: `/search fb [كلمة البحث]`\n\n"
+        "⚡ **ميزات النظام:**\n"
+        "- استكمال التحميل تلقائياً.\n"
+        "- فحص الجودة قبل البدء.\n"
+        "- حماية الخصوصية ونظام إدارة المهام المتطور."
     )
-    bot.send_message(message.chat.id, text)
+    bot.send_message(message.chat.id, help_text, parse_mode="Markdown")
 
-#==========================================
-# 🔎 أمر البحث عن الفيديوهات
-#==========================================
+@bot.message_handler(commands=['status'])
+def server_status(message):
+    try:
+        import psutil
+        cpu = psutil.cpu_percent()
+        ram = psutil.virtual_memory().percent
+        status = (
+            "🖥 **حالة النظام المتطور:**\n\n"
+            f"⚙️ استهلاك المعالج: {cpu}%\n"
+            f"🧠 استهلاك الذاكرة: {ram}%\n"
+            "📡 الحالة: متصل ومحمي بنظام التشفير."
+        )
+        bot.reply_to(message, status, parse_mode="Markdown")
+    except Exception as e:
+        bot.reply_to(message, "⚠️ ميزة مراقبة النظام تحتاج لتثبيت مكتبة psutil.")
 
 @bot.message_handler(commands=['search'])
 def search_command(message):
     parts = message.text.split(maxsplit=2)
-    if len(parts) < 2:
-        bot.reply_to(message, "🔎 اكتب اسم الفيديو بعد الأمر\nمثال:\n/search توم وجيري")
+    if len(parts) < 3:
+        bot.reply_to(message, "⚠️ طريقة البحث الصحيحة:\n/search tik توم وجيري\n/search ins مضحك")
         return
 
-    query = parts[1]
-    limit = 5
-    if len(parts) == 3 and parts[2].isdigit():
-        limit = min(10, int(parts[2]))
-
-    msg = bot.reply_to(message, "🔍 جاري البحث من الإنترنت...")
-    results = InternetSearch.search(query, limit=limit)
-
+    platform = parts[1].lower()
+    query = parts[2]
+    
+    msg = bot.reply_to(message, f"🔍 جاري البحث في {platform}...")
+    results = InternetSearch.search(query, platform=platform)
+    
     if not results:
-        bot.edit_message_text("❌ لم يتم العثور على نتائج.", msg.chat.id, msg.message_id)
+        bot.edit_message_text("❌ لم يتم العثور على نتائج لهذه المنصة.", msg.chat.id, msg.message_id)
         return
 
     for r in results:
+        url_hash = hashlib.md5(r["url"].encode()).hexdigest()[:10]
+        user_id = message.from_user.id
+        
+        # تخزين بيانات البحث مؤقتاً
+        data = Database.load()
+        data["users"][str(user_id)] = {
+            "url": r["url"],
+            "file_id": f"{user_id}_{url_hash}"
+        }
+        Database.save(data)
+
+        markup = types.InlineKeyboardMarkup(row_width=3)    
+        markup.add(    
+            types.InlineKeyboardButton("720p", callback_data=f"get_{user_id}_{user_id}_{url_hash}_720"),    
+            types.InlineKeyboardButton("480p", callback_data=f"get_{user_id}_{user_id}_{url_hash}_480"),    
+            types.InlineKeyboardButton("🎵 MP3", callback_data=f"get_{user_id}_{user_id}_{url_hash}_audio")    
+        )    
+
+        caption = f"🎬 {r['title']}\n📺 المنصة: {r['uploader']}"
+        bot.send_message(message.chat.id, caption, reply_markup=markup)
+
+    bot.delete_message(msg.chat.id, msg.message_id)
+        
+                         
+
+#==========================================
+# 🔎 أمر البحث عن الفيديوهات
+#==========================================
+@bot.message_handler(commands=['search'])
+def search_command(message):
+    parts = message.text.split(maxsplit=2)
+    # /search [platform] [query]
+    if len(parts) < 3:
+        bot.reply_to(message, "⚠️ طريقة البحث الصحيحة:\n/search tik توم وجيري\n/search ins مضحك")
+        return
+
+    platform = parts[1].lower()
+    query = parts[2]
+    
+    msg = bot.reply_to(message, f"🔍 جاري البحث في {platform}...")
+    results = InternetSearch.search(query, platform=platform)
+    
+    if not results:
+        bot.edit_message_text("❌ لم يتم العثور على نتائج لهذه المنصة.", msg.chat.id, msg.message_id)
+        return
+
+    for r in results:
+        # هنا نستخدم نفس منطق الأزرار السابق
+        # ... (بقية الكود الخاص بإرسال النتائج والأزرار)
+        :
         url_hash = hashlib.md5(r["url"].encode()).hexdigest()[:10]
         data = Database.load()
         data["users"][str(message.from_user.id)] = {
