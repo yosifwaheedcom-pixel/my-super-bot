@@ -2,4 +2,4 @@ pyTelegramBotAPI
 yt-dlp
 flask
 psutil
-requests
+duckduckgo_search
