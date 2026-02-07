@@ -342,6 +342,7 @@ def search_command(message):
         }
         Database.save(data)
 
+        # أزرار التحميل
         markup = types.InlineKeyboardMarkup(row_width=3)    
         markup.add(    
             types.InlineKeyboardButton("720p", callback_data=f"get_{user_id}_{user_id}_{url_hash}_720"),    
@@ -351,12 +352,7 @@ def search_command(message):
 
         caption = f"🎬 {r['title']}\n📺 المنصة: {r['uploader']}"
         bot.send_message(message.chat.id, caption, reply_markup=markup)
-
-    bot.delete_message(msg.chat.id, msg.message_id)
-        
-                         
-
-#==========================================
+                               
 # 🔎 أمر البحث عن الفيديوهات
 #==========================================
 @bot.message_handler(commands=['search'])
